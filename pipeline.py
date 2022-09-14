@@ -1,10 +1,11 @@
 import kfp
 import kfp.components as comp
 import kfp.dsl as dsl
+from kubernetes import client as k8s_client
 
 import pandas as pd
 
-read_op = kfp.components.load_component_from_file('component.yaml')
+read_op = kfp.components.load_component_from_file('components/my_first_component/component.yaml')
 create_step_write_lines = comp.load_component_from_text("""
 name: Write Lines
 description: Writes text to a file.
@@ -43,9 +44,11 @@ def my_pipeline():
         input_1=write_lines_step.outputs['data'],
         parameter_1='5',
     )
+    dsl.get_pipeline_conf()\
+    .set_image_pull_secrets([k8s_client.V1ObjectReference(name="docker-hub-account")])
 
 
-client = kfp.Client(host='http://localhost:8080')
+client = kfp.Client(host='http://localhost:8080/pipeline')
 
 # Compile, upload, and submit this pipeline for execution.
 client.create_run_from_pipeline_func(my_pipeline, arguments={})

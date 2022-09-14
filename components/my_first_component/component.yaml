@@ -2,23 +2,22 @@ name: Get Lines
 description: Gets the specified number of lines from the input file.
 
 inputs:
-- {name: Input 1, type: String, description: 'Data for input 1'}
+- {name: Input 1, type: Data, description: 'Data for input 1'}
 - {name: Parameter 1, type: Integer, default: '100', description: 'Number of lines to copy'}
 
 outputs:
-- {name: Output 1, type: String, description: 'Output 1 data.'}
+- {name: Output 1, type: Data, description: 'Output 1 data.'}
 
 implementation:
   container:
-    # The strict name of a container image that you've pushed to a container registry.
-    image: foxy7887/my-image@sha256:1e04882024ac3cb43ff7eb3e1db60600362c5336d25d71a7462389258003a9ff
+    image: foxy7887/my-image:latest@sha256:1e04882024ac3cb43ff7eb3e1db60600362c5336d25d71a7462389258003a9ff
     # command is a list of strings (command-line arguments). 
     # The YAML language has two syntaxes for lists and you can use either of them. 
     # Here we use the "flow syntax" - comma-separated strings inside square brackets.
     command: [
       python3, 
       # Path of the program inside the container
-      /pipelines/component/src/program.py,
+      /pipelines/component/src/app.py,
       --input1-path,
       {inputPath: Input 1},
       --param1, 
