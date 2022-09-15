@@ -34,3 +34,36 @@ kubectl get pod my-pod -o yaml                # Get a pod's YAML
 kubectl describe nodes my-node
 kubectl describe pods my-pod
 ```
+
+
+
+# Adding secrets to a namespace in the cluster
+echo -n 'admin' | base64
+echo -n '1f2d1e2e67df' | base64
+
+create the manifest
+
+kubectl apply -f ./secret.yaml
+
+check that the secret was created:
+``` 
+kubectl get secrets 
+kubectl get secrets mysecret -n ${NAMESPACE} -o jsonpath='{.data.password} | base64 --decode
+```
+
+kubectl describe secrets/mysecret
+
+# Decoding the secret
+To view the contents of the Secret you created, run the following command:
+
+```kubectl get secret mysecret -o jsonpath='{.data}'```
+
+decode the password using:
+```echo 'MWYyZDFlMmU2N2Rm' | base64 --decode```
+
+or 
+
+```kubectl get secret mysecret -o jsonpath='{.data.password}' | base64 --decode```
+
+## clean up
+``` kubectl delete secret mysecret ```

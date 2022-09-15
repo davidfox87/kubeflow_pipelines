@@ -30,6 +30,14 @@ implementation:
     - {outputPath: data}
 """)
 
+def mnist_train_op(model_file, bucket):
+    return dsl.ContainerOp(
+      name="mnist_training_container",
+      image='foxy7887/mnist_training_kf_pipeline:latest',
+      command=['python', '/app/app.py'],
+      file_outputs={'outputs': '/output.txt'},
+      arguments=['--bucket', bucket, '--model_file', model_file]
+    )
 
 @dsl.pipeline(
   name='read pipeline',
