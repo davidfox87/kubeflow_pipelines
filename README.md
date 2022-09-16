@@ -1,3 +1,6 @@
+
+
+
 # Installing a local deployment of Kubeflow on a local Kubernetes cluster
 https://www.kubeflow.org/docs/components/pipelines/installation/localcluster-deployment/
 ```
@@ -16,6 +19,43 @@ To allow the pipelines components to pull image from docker registries:
 ```kubectl create secret docker-registry --namespace=kubeflow docker-hub-account --docker-server=https://docker.io --docker-username=foxy7887 --docker-password="*******!"```
 
 and then set the secret in the kubeflow pipeline
+
+
+# Installing Kubeflow on AWS
+## Prerequisites
+- Kubernetes EKS AWS
+- Kustomize  (version 3.2.0)
+- kubectl
+
+# Clone repositories
+```
+export KUBEFLOW_RELEASE_VERSION=v1.5.1
+export AWS_RELEASE_VERSION=v1.5.1-aws-b1.0.1
+```
+Run the script to clone and set the release version
+```
+./install.sh
+```
+
+Install Kustomize by downloading precompiled binaries
+```
+wget https://github.com/kubernetes-sigs/kustomize/releases/download/v3.2.0/kustomize_3.2.0_linux_amd64
+mv kustomize_3.2.0_linux_amd64 kustomize
+mv kustomize /usr/local/bin
+```
+
+
+
+## install with a single command
+You can install all Kubeflow official components by running the following command in the infra/kubeflow_install/kubeflow_manifests folder:
+
+```
+while ! kustomize build deployments/vanilla | kubectl apply -f -; do echo "Retrying to apply resources"; sleep 30; done
+
+```
+
+
+
 
 # kubernetes commands
 https://kubernetes.io/docs/reference/kubectl/cheatsheet/
@@ -67,3 +107,4 @@ or
 
 ## clean up
 ``` kubectl delete secret mysecret ```
+

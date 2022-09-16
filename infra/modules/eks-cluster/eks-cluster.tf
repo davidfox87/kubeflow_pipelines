@@ -6,7 +6,7 @@ resource "aws_eks_cluster" "demo" {
     security_group_ids = ["${aws_security_group.cluster_security_group_id.id}"]
     subnet_ids         =  "${var.subnets}"
   }
-
+  version = "1.21" # kubeflow install manifests won't work with latest version of Kubernetes
   depends_on = [
     aws_iam_role_policy_attachment.AmazonEKSClusterPolicy,
     aws_iam_role_policy_attachment.AmazonEKSServicePolicy,
