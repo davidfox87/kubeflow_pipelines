@@ -1,7 +1,6 @@
 variable "region" {
   description = "AWS region"
   type        = string
-  default     = "us-west-1"
 }
 
 variable "environment" {
@@ -28,9 +27,7 @@ variable "environment" {
 #   }
 
 # }
-
 variable "cluster-name" {
   type        = string
   description = "eks-cluster"
-  default = "test-EKS-cluster"
 }
