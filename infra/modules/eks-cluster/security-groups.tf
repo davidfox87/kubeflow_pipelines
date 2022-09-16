@@ -1,4 +1,4 @@
-resource "aws_security_group" "demo-cluster" {
+resource "aws_security_group" "cluster_security_group_id" {
   name        = "terraform-eks-demo-cluster"
   description = "Cluster communication with worker nodes"
   vpc_id      = "${var.vpc_id}"

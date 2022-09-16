@@ -17,3 +17,7 @@ aws eks --region $(terraform output -raw region) update-kubeconfig \
 You have now provisioned an EKS cluster, configured kubectl, and verified that your cluster is ready to use.
 
 ```terraform destroy```
+
+
+
+https://learn.hashicorp.com/tutorials/terraform/eks
