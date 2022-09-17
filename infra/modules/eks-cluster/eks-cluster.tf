@@ -13,7 +13,16 @@ resource "aws_eks_cluster" "demo" {
   ]
 }
 
+# Get information about the TLS certificates securing a host.
+data "tls_certificate" "example" {
+  url = aws_eks_cluster.demo.identity[0].oidc[0].issuer
+}
 
+resource "aws_iam_openid_connect_provider" "example" {
+  client_id_list  = ["sts.amazonaws.com"]
+  thumbprint_list = [data.tls_certificate.demo.certificates[0].sha1_fingerprint]
+  url             = aws_eks_cluster.demo.identity[0].oidc[0].issuer
+}
 
 resource "aws_eks_node_group" "example" {
   cluster_name    = aws_eks_cluster.demo.name
@@ -21,6 +30,7 @@ resource "aws_eks_node_group" "example" {
   node_role_arn   = aws_iam_role.workernodes.arn
   subnet_ids      = [var.subnets[2], var.subnets[3]] # private subnets
 
+  instance_types = ["m5.xlarge"]
   scaling_config {
     desired_size = 5
     max_size     = 10
@@ -48,10 +58,6 @@ resource "aws_eks_node_group" "example" {
   ]
 }
 
-
-
-
-
 # data "aws_ami" "eks-worker" {
 #   filter {
 #     name   = "name"
@@ -62,28 +68,19 @@ resource "aws_eks_node_group" "example" {
 #   owners      = ["602401143452"] # Amazon EKS AMI Account ID
 # }
 
+# resource "aws_launch_template" "foo" {
+#   name = "foo"
 
-#### User data for worker launch
-#### The launch template to use with the EKS managed node
-
-# locals {
-#   demo-node-userdata = <<USERDATA
-# #!/bin/bash
-# set -o xtrace
-# /etc/eks/bootstrap.sh --apiserver-endpoint '${aws_eks_cluster.demo.endpoint}' --b64-cluster-ca '${aws_eks_cluster.demo.certificate_authority.0.data}' '${var.cluster-name}'
-# USERDATA
-# }
-
-# resource "aws_launch_configuration" "demo" {
-#   associate_public_ip_address = true
-#   iam_instance_profile        = "${aws_iam_instance_profile.demo-node.name}"
-#   image_id                    = "${data.aws_ami.eks-worker.id}"
-#   instance_type               = "m4.large"
-#   name_prefix                 = "terraform-eks-demo"
-#   security_groups             = ["${aws_security_group.demo-node.id}"]
-#   user_data_base64            = "${base64encode(local.demo-node-userdata)}"
-
-#   lifecycle {
-#     create_before_destroy = true
+#   image_id = "${data.aws_ami.eks-worker.id}"
+#   instance_type = "m5.xlarge"
+#   monitoring {
+#     enabled = true
 #   }
+
+#   network_interfaces {
+#     associate_public_ip_address = true
+#   }
+#   #vpc_security_group_ids = []
 # }
+
+

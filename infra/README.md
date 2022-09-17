@@ -48,3 +48,7 @@ terraform destroy
 
 
 https://learn.hashicorp.com/tutorials/terraform/eks
+
+
+TO DO:
+- Configure the cluster with an OIDC provider and add support for ISRA (IAM Roles for Service Accounts)

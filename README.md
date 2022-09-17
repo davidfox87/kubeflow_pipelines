@@ -54,8 +54,22 @@ while ! kustomize build deployments/vanilla | kubectl apply -f -; do echo "Retry
 
 ```
 
+# Port-Forward
+To get started quickly, you can access Kubeflow via port-forward. Run the following to port-forward Istio’s Ingress-Gateway to local port 8080:
+```
+kubectl port-forward svc/istio-ingressgateway -n istio-system 8080:80
+```
 
 
+# Access Kubeflow Pipelines from Jupyter notebook
+
+In order to access Kubeflow Pipelines from Jupyter notebook, an additional per namespace (profile) manifest is required:
+```
+kubectl apply -f kfp-access.yaml 
+```
+
+# Configuring a notebook
+https://www.kubeflow.org/docs/components/notebooks/quickstart-guide/#create-a-jupyter-notebook-server-and-add-a-notebook
 
 # kubernetes commands
 https://kubernetes.io/docs/reference/kubectl/cheatsheet/
@@ -73,6 +87,10 @@ kubectl get pod my-pod -o yaml                # Get a pod's YAML
 # Describe commands with verbose output
 kubectl describe nodes my-node
 kubectl describe pods my-pod
+
+# list current namespaces in the cluster
+kubectl get namespace
+kubectl get namespaces --show-labels
 ```
 
 
