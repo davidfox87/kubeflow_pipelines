@@ -52,3 +52,8 @@ https://learn.hashicorp.com/tutorials/terraform/eks
 
 TO DO:
 - Configure the cluster with an OIDC provider and add support for ISRA (IAM Roles for Service Accounts)
+
+
+kubectl apply -f pods/commands.yaml
+kubectl get pods
+kubectl logs command-demo

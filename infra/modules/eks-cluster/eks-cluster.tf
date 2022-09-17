@@ -14,11 +14,11 @@ resource "aws_eks_cluster" "demo" {
 }
 
 # Get information about the TLS certificates securing a host.
-data "tls_certificate" "example" {
+data "tls_certificate" "demo" {
   url = aws_eks_cluster.demo.identity[0].oidc[0].issuer
 }
 
-resource "aws_iam_openid_connect_provider" "example" {
+resource "aws_iam_openid_connect_provider" "eks-cluster" {
   client_id_list  = ["sts.amazonaws.com"]
   thumbprint_list = [data.tls_certificate.demo.certificates[0].sha1_fingerprint]
   url             = aws_eks_cluster.demo.identity[0].oidc[0].issuer
