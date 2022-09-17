@@ -34,3 +34,5 @@ override.tf.json
 # example: *tfplan*
 
 *.lock.hcl
+
+kubeconfig.yaml
