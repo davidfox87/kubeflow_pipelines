@@ -3,7 +3,7 @@
 
 # Installing a local deployment of Kubeflow on a local Kubernetes cluster
 https://www.kubeflow.org/docs/components/pipelines/installation/localcluster-deployment/
-```
+
 create Kind k8s cluster
 
 
