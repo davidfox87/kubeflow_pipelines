@@ -30,11 +30,11 @@ resource "aws_eks_node_group" "example" {
   node_role_arn   = aws_iam_role.workernodes.arn
   subnet_ids      = [var.subnets[2], var.subnets[3]] # private subnets
 
-  instance_types = ["m5.xlarge"]
+  instance_types = ["t3.small"]#["m5.xlarge"]
   scaling_config {
-    desired_size = 5
-    max_size     = 10
-    min_size     = 5
+    desired_size = 2#5
+    max_size     = 5#10
+    min_size     = 2# 5
   }
 
   # launch_template {

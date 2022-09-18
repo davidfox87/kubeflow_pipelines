@@ -1,19 +1,20 @@
-resource "kubernetes_service_account" "eks-service-account" {
-  metadata {
-    name = "demo-user" # This is used as the serviceAccountName in the spec section of the k8 pod manifest
-                        # it means that the pod can assume the IAM role with the S3 policy attached
-    namespace = "default"
-
-    annotations = {
-      "eks.amazonaws.com/role-arn" = aws_iam_role.eks-service-account-role.arn
-    }
-  }
-}
+# resource "kubernetes_service_account" "eks-service-account" {
+#   metadata {
+#     name = "demo-user" # This is used as the serviceAccountName in the spec section of the k8 pod manifest
+#                         # it means that the pod can assume the IAM role with the S3 policy attached
+#     namespace = "default"
+    
+#     annotations = {
+#       "eks.amazonaws.com/role-arn" = aws_iam_role.eks-service-account-role.arn
+#     }
+#   }
+#   automount_service_account_token = true
+# }
 
 
 resource "aws_iam_role" "eks-service-account-role" {
-  name = "workload_sa"
-
+  name = "iam-test"
+  
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -35,11 +36,23 @@ resource "aws_iam_role" "eks-service-account-role" {
       Version = "2012-10-17"
       Statement = [
         {
-          Action   = ["s3:GetBucket", "s3:GetObject", "s3:PutObject"]
-          Effect   = "Allow"
-          Resource = "*"
+            "Sid": "ListObjectsInBucket",
+            "Effect": "Allow",
+            "Action": "s3:ListBucket",
+            "Resource": ["arn:aws:s3:::my-test-k8s-bucket"]
         },
+        {
+            "Sid": "AllObjectActions",
+            "Effect": "Allow",
+            "Action": "s3:*Object",
+            "Resource": ["arn:aws:s3:::my-test-k8s-bucket/*"]
+        }
       ]
     })
   }
+}
+
+resource aws_iam_role_policy_attachment s3_full_access {
+  role = aws_iam_role.eks-service-account-role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess"
 }

@@ -17,4 +17,4 @@ spec:
     command: ['python3 app.py'] # https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/
     args: 
     - --bucket
-    - k8s-test-bucket
+    - my-test-k8s-bucket
